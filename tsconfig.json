@@ -17,6 +17,12 @@
 			"#test/*": ["./test/*.ts"]
 		},
 		"outDir": "./build",
+    "types": [
+      // Other types...
+      // This allows Serwist to properly type "virtual:serwist".
+      "@serwist/vite/typings"
+    ],
+		"lib": ["dom", "dom.iterable", "ES2022", "WebWorker"],
 		"noEmit": true
 	},
 	"typedocOptions": {

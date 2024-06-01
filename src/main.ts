@@ -7,7 +7,7 @@ import BBCodeTextPlugin from "phaser3-rex-plugins/plugins/bbcodetext-plugin";
 import InputTextPlugin from "phaser3-rex-plugins/plugins/inputtext-plugin.js";
 import TransitionImagePackPlugin from "phaser3-rex-plugins/templates/transitionimagepack/transitionimagepack-plugin.js";
 import { LoadingScene } from "./loading-scene";
-
+import { getSerwist } from "virtual:serwist";
 
 // Catch global errors and display them in an alert so users can report the issue.
 window.onerror = function (message, source, lineno, colno, error) {
@@ -31,44 +31,50 @@ const config: Phaser.Types.Core.GameConfig = {
   scale: {
     width: 1920,
     height: 1080,
-    mode: Phaser.Scale.FIT
+    mode: Phaser.Scale.FIT,
   },
   plugins: {
-    global: [{
-      key: "rexInputTextPlugin",
-      plugin: InputTextPlugin,
-      start: true
-    }, {
-      key: "rexBBCodeTextPlugin",
-      plugin: BBCodeTextPlugin,
-      start: true
-    }, {
-      key: "rexTransitionImagePackPlugin",
-      plugin: TransitionImagePackPlugin,
-      start: true
-    }],
-    scene: [{
-      key: "rexUI",
-      plugin: UIPlugin,
-      mapping: "rexUI"
-    }]
+    global: [
+      {
+        key: "rexInputTextPlugin",
+        plugin: InputTextPlugin,
+        start: true,
+      },
+      {
+        key: "rexBBCodeTextPlugin",
+        plugin: BBCodeTextPlugin,
+        start: true,
+      },
+      {
+        key: "rexTransitionImagePackPlugin",
+        plugin: TransitionImagePackPlugin,
+        start: true,
+      },
+    ],
+    scene: [
+      {
+        key: "rexUI",
+        plugin: UIPlugin,
+        mapping: "rexUI",
+      },
+    ],
   },
   input: {
     mouse: {
-      target: "app"
+      target: "app",
     },
     touch: {
-      target: "app"
+      target: "app",
     },
-    gamepad: true
+    gamepad: true,
   },
   dom: {
-    createContainer: true
+    createContainer: true,
   },
   pixelArt: true,
-  pipeline: [ InvertPostFX ] as unknown as Phaser.Types.Core.PipelineConfig,
-  scene: [ LoadingScene, BattleScene ],
-  version: version
+  pipeline: [InvertPostFX] as unknown as Phaser.Types.Core.PipelineConfig,
+  scene: [LoadingScene, BattleScene],
+  version: version,
 };
 
 /**
@@ -84,62 +90,62 @@ const setPositionRelative = function (guideObject: any, x: number, y: number) {
 };
 
 declare module "phaser" {
-	namespace GameObjects {
-		interface Container {
+  namespace GameObjects {
+    interface Container {
       /**
        * Sets this object's position relative to another object with a given offset
        * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
        * @param x The relative x position
        * @param y The relative y position
        */
-			setPositionRelative(guideObject: any, x: number, y: number): void;
-		}
-		interface Sprite {
+      setPositionRelative(guideObject: any, x: number, y: number): void
+    }
+    interface Sprite {
       /**
        * Sets this object's position relative to another object with a given offset
        * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
        * @param x The relative x position
        * @param y The relative y position
        */
-			setPositionRelative(guideObject: any, x: number, y: number): void;
-		}
-		interface Image {
+      setPositionRelative(guideObject: any, x: number, y: number): void
+    }
+    interface Image {
       /**
        * Sets this object's position relative to another object with a given offset
        * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
        * @param x The relative x position
        * @param y The relative y position
        */
-			setPositionRelative(guideObject: any, x: number, y: number): void;
-		}
-		interface NineSlice {
+      setPositionRelative(guideObject: any, x: number, y: number): void
+    }
+    interface NineSlice {
       /**
        * Sets this object's position relative to another object with a given offset
        * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
        * @param x The relative x position
        * @param y The relative y position
        */
-			setPositionRelative(guideObject: any, x: number, y: number): void;
-		}
-		interface Text {
+      setPositionRelative(guideObject: any, x: number, y: number): void
+    }
+    interface Text {
       /**
        * Sets this object's position relative to another object with a given offset
        * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
        * @param x The relative x position
        * @param y The relative y position
        */
-			setPositionRelative(guideObject: any, x: number, y: number): void;
-		}
-		interface Rectangle {
+      setPositionRelative(guideObject: any, x: number, y: number): void
+    }
+    interface Rectangle {
       /**
        * Sets this object's position relative to another object with a given offset
        * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
        * @param x The relative x position
        * @param y The relative y position
        */
-			setPositionRelative(guideObject: any, x: number, y: number): void;
-		}
-	}
+      setPositionRelative(guideObject: any, x: number, y: number): void
+    }
+  }
 }
 
 Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative;
@@ -159,13 +165,28 @@ const startGame = () => {
 };
 
 fetch("/manifest.json")
-  .then(res => res.json())
-  .then(jsonResponse => {
+  .then((res) => res.json())
+  .then((jsonResponse) => {
     startGame();
     game["manifest"] = jsonResponse.manifest;
-  }).catch(() => {
+  })
+  .catch(() => {
     // Manifest not found (likely local build)
     startGame();
   });
+
+const loadSerwist = async () => {
+  if ("serviceWorker" in navigator) {
+    const serwist = await getSerwist();
+
+    serwist?.addEventListener("installed", () => {
+      console.log("Serwist installed!");
+    });
+
+    void serwist?.register();
+  }
+};
+
+loadSerwist();
 
 export default game;
