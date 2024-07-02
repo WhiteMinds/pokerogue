@@ -1478,7 +1478,7 @@ export class PokemonLevelIncrementModifier extends ConsumablePokemonModifier {
       pokemon.levelExp = 0;
     }
 
-    pokemon.addFriendship(5);
+    pokemon.addFriendship(5 * 40);
 
     pokemon.scene.unshiftPhase(new LevelUpPhase(pokemon.scene, pokemon.scene.getParty().indexOf(pokemon), pokemon.level - levelCount.value, pokemon.level));
 
@@ -2068,7 +2068,7 @@ export class ShinyRateBoosterModifier extends PersistentModifier {
   }
 
   getMaxStackCount(scene: BattleScene): integer {
-    return 4;
+    return 3;
   }
 }
 

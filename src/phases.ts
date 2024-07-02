@@ -3873,7 +3873,7 @@ export class VictoryPhase extends PokemonPhase {
         const pId = partyMember.id;
         const participated = participantIds.has(pId);
         if (participated) {
-          partyMember.addFriendship(2);
+          partyMember.addFriendship(2 * 40);
         }
         if (!expPartyMembers.includes(partyMember)) {
           continue;
@@ -5271,7 +5271,11 @@ export class SelectModifierPhase extends BattlePhase {
     } else {
       baseValue = 250;
     }
-    return Math.min(Math.ceil(this.scene.currentBattle.waveIndex / 10) * baseValue * Math.pow(2, this.rerollCount), Number.MAX_SAFE_INTEGER);
+    // return 1;
+    return Math.min(
+      Math.ceil((Math.ceil(this.scene.currentBattle.waveIndex / 10) * baseValue * Math.pow(2, this.rerollCount)) / 100),
+      Number.MAX_SAFE_INTEGER
+    );
   }
 
   getPoolType(): ModifierPoolType {
@@ -5296,7 +5300,7 @@ export class EggLapsePhase extends Phase {
     super.start();
 
     const eggsToHatch: Egg[] = this.scene.gameData.eggs.filter((egg: Egg) => {
-      return Overrides.EGG_IMMEDIATE_HATCH_OVERRIDE ? true : --egg.hatchWaves < 1;
+      return Overrides.EGG_IMMEDIATE_HATCH_OVERRIDE ? true : (egg.hatchWaves -= 8) < 1;
     });
 
     let eggCount: integer = eggsToHatch.length;

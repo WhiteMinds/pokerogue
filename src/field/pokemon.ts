@@ -1343,7 +1343,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const E = this.scene.gameData.trainerId ^ this.scene.gameData.secretId;
     const F = rand1 ^ rand2;
 
-    const shinyThreshold = new Utils.IntegerHolder(32);
+    const shinyThreshold = new Utils.IntegerHolder(32 * 50);
     if (thresholdOverride === undefined) {
       if (this.scene.eventManager.isEventActive()) {
         shinyThreshold.value *= this.scene.eventManager.getShinyMultiplier();
@@ -1356,7 +1356,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     this.shiny = (E ^ F) < shinyThreshold.value;
-    if ((E ^ F) < 32) {
+    if ((E ^ F) < 32 * 50) {
       console.log("REAL SHINY!!");
     }
 
@@ -1388,12 +1388,12 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       return 0;
     }
     const rand = Utils.randSeedInt(10);
-    if (rand >= 4) {
-      return 0;             // 6/10
-    } else if (rand >= 1) {
+    if (rand >= 6) {
+      return 0;             // 4/10
+    } else if (rand >= 3) {
       return 1;             // 3/10
     } else {
-      return 2;             // 1/10
+      return 2;             // 3/10
     }
   }
 

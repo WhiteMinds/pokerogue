@@ -13,9 +13,9 @@ import { EggSourceType } from "#app/enums/egg-source-types.js";
 export const EGG_SEED = 1073741824;
 
 // Rates for specific random properties in 1/x
-const DEFAULT_SHINY_RATE = 128;
-const GACHA_SHINY_UP_SHINY_RATE = 64;
-const SAME_SPECIES_EGG_SHINY_RATE = 32;
+const DEFAULT_SHINY_RATE = 128 / 16;
+const GACHA_SHINY_UP_SHINY_RATE = 64 / 16;
+const SAME_SPECIES_EGG_SHINY_RATE = 32 / 16;
 const SAME_SPECIES_EGG_HA_RATE = 16;
 const MANAPHY_EGG_MANAPHY_RATE = 8;
 
